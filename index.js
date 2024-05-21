@@ -1,6 +1,11 @@
+// This imports all the npm modules
 const inquirer = require("inquirer");
 const pg = require("pg");
+const colors = require("colors");
 const figlet = require("figlet");
+
+// this unlocks more advanced features of colors module
+colors.enable();
 
 const eyeArt = `
 ⠀⠀⡀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -19,29 +24,60 @@ const eyeArt = `
 ⠀⠀⠀⠀⠀⠉⠉⠉⠛⠻⢛⣿⣶⣶⡽⢤⡄⢛⢃⣒⢠⣿⣿⠟⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠁⠀⠁⠀⠀⠀⠀⠀`;
 
-function displayMenu() {
-  const questions = [
-    {
-      type: "list",
-      name: "choice",
-      message: "What would you like to do?",
-      choices: [
-        "View All Employees",
-        "Add Employee",
-        "Update Employee Role",
-        "View All Roles",
-        "Add Role",
-        "View All Departments",
-        "Add Department",
-      ],
-    },
-  ];
+const displayMenu = () => {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "action",
+        message: "What would you like to do?",
+        choices: [
+          "View All Employees",
+          "Add Employee",
+          "Update Employee Role",
+          "View All Roles",
+          "Add Role",
+          "View All Departments",
+          "Add Department",
+          { name: "Execute Order 66".red, value: "executeOrder66" },
+          { name: "Exit".green, value: "exit" },
+        ],
+      },
+    ])
+    .then((answers) => {
+      switch (answers.action) {
+        case "executeOrder66":
+          promptForPassword();
+          break;
+        case "exit":
+          console.log("Exiting the application...".green);
+          process.exit(); // This will exit the application
+        default:
+          console.log("Option not implemented yet");
+        // Implement other cases as needed
+      }
+    });
+};
 
-  inquirer.prompt(questions).then((answers) => {
-    console.log("You selected: ", answers.choice);
-    // Continue your application logic based on the choice here
-  });
-}
+const promptForPassword = () => {
+  inquirer
+    .prompt([
+      {
+        type: "password",
+        name: "password",
+        message: "Enter the password to execute Order 66:",
+        mask: "*",
+      },
+    ])
+    .then((answers) => {
+      if (answers.password === "theCorrectPassword") {
+        // Replace 'theCorrectPassword' with the actual password
+        console.log("Order 66 executed successfully.".green);
+      } else {
+        console.log("Incorrect password. Access denied.".red);
+      }
+    });
+};
 
 figlet.text(
   "Dystopi - Track Systems",
