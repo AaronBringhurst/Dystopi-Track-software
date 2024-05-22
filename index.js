@@ -46,6 +46,25 @@ const displayMenu = () => {
     ])
     .then((answers) => {
       switch (answers.action) {
+        case "viewAllEmployees":
+          viewAllEmployees().then(() => displayMenu()); // Call displayMenu again after the operation
+          break;
+        case "viewAllRoles":
+          viewAllRoles().then(() => displayMenu());
+          break;
+        case "viewAllDepartments":
+          viewAllDepartments().then(() => displayMenu());
+        
+          case 'addDepartment':
+            addDepartment().then(() => displayMenu());
+            break;
+        case 'addRole':
+            addRole().then(() => displayMenu());
+            break;
+        case 'addEmployee':
+            addEmployee().then(() => displayMenu());
+            break;
+        
         case "executeOrder66":
           promptForPassword();
           break;
