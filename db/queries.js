@@ -1,4 +1,39 @@
-const pool = require("./pool");
+const inquirer = require("inquirer");
+const { Pool } = require("pg");
+const pool = new Pool({
+  user: "postgres",
+  password: "asdf",
+  host: "localhost",
+  database: "cogwheel_db",
+  port: 5432,
+});
+
+const viewAllEmployees = async () => {
+    try {
+      const result = await pool.query("SELECT * FROM employee");
+      console.log(result.rows);
+    } catch (err) {
+      console.error("Error fetching employees:", err.stack);
+    }
+  };
+
+  const viewAllRoles = async () => {
+    try {
+      const result = await pool.query("SELECT * FROM role");
+      console.log(result.rows);
+    } catch (err) {
+      console.error("Error fetching roles:", err.stack);
+    }
+  };
+
+  const viewAllDepartments = async () => {
+    try {
+      const result = await pool.query("SELECT * FROM department");
+      console.log(result.rows);
+    } catch (err) {
+      console.error("Error fetching departments:", err.stack);
+    }
+  };
 
 // Function to add a department
 const addDepartment = async () => {
@@ -118,4 +153,7 @@ module.exports = {
   addDepartment,
   addRole,
   addEmployee,
+  viewAllDepartments,
+  viewAllEmployees,
+  viewAllRoles,
 };

@@ -1,10 +1,18 @@
 // This imports all the npm modules
+const {
+  viewAllEmployees,
+  addEmployee,
+  viewAllRoles,
+  addRole,
+  viewAllDepartments,
+  addDepartment,
+} = require("./db/queries");
 const inquirer = require("inquirer");
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const colors = require("colors");
 const figlet = require("figlet");
 
-const client = new Client({
+const pool = new Pool({
   user: "postgres",
   password: "asdf",
   host: "localhost",
@@ -54,23 +62,25 @@ const displayMenu = () => {
     ])
     .then((answers) => {
       switch (answers.action) {
-        case "viewAllEmployees":
+        case "View All Employees":
           viewAllEmployees().then(() => displayMenu()); // Call displayMenu again after the operation
           break;
-        case "viewAllRoles":
+        case "Add Employee":
+          addEmployee().then(() => displayMenu());
+          break;
+        case "Update Employee Role":
+          addEmployee().then(() => displayMenu());
+          break;
+        case "View All Roles":
           viewAllRoles().then(() => displayMenu());
+          break;
+        case "Add Role":
+          addRole().then(() => displayMenu());
           break;
         case "viewAllDepartments":
           viewAllDepartments().then(() => displayMenu());
-
         case "addDepartment":
           addDepartment().then(() => displayMenu());
-          break;
-        case "addRole":
-          addRole().then(() => displayMenu());
-          break;
-        case "addEmployee":
-          addEmployee().then(() => displayMenu());
           break;
 
         case "executeOrder66":
@@ -125,11 +135,12 @@ figlet.text(
   }
 );
 
-client.connect()
-    .then(() => {
-      console.log("Connected to the CogWheel_db database.");
-      displayMenu(); // Only call displayMenu after a successful connection
-    })
-    .catch(err => {
-      console.error("Failed to connect to the database:", err);
-});
+pool
+  .connect()
+  .then(() => {
+    console.log("Connected to the CogWheel_db database.");
+    displayMenu(); // Only call displayMenu after a successful connection
+  })
+  .catch((err) => {
+    console.error("Failed to connect to the database:", err);
+  });
