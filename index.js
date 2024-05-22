@@ -1,8 +1,16 @@
 // This imports all the npm modules
 const inquirer = require("inquirer");
-const pg = require("pg");
+const { Client } = require("pg");
 const colors = require("colors");
 const figlet = require("figlet");
+
+const client = new Client({
+  user: "postgres",
+  password: "asdf",
+  host: "localhost",
+  database: "cogwheel_db",
+  port: 5432,
+});
 
 // this unlocks more advanced features of colors module
 colors.enable();
@@ -54,17 +62,17 @@ const displayMenu = () => {
           break;
         case "viewAllDepartments":
           viewAllDepartments().then(() => displayMenu());
-        
-          case 'addDepartment':
-            addDepartment().then(() => displayMenu());
-            break;
-        case 'addRole':
-            addRole().then(() => displayMenu());
-            break;
-        case 'addEmployee':
-            addEmployee().then(() => displayMenu());
-            break;
-        
+
+        case "addDepartment":
+          addDepartment().then(() => displayMenu());
+          break;
+        case "addRole":
+          addRole().then(() => displayMenu());
+          break;
+        case "addEmployee":
+          addEmployee().then(() => displayMenu());
+          break;
+
         case "executeOrder66":
           promptForPassword();
           break;
@@ -114,6 +122,14 @@ figlet.text(
     }
     console.log(data);
     console.log(eyeArt); // Display the eye art after the logo
-    displayMenu(); // Display the menu after the logo and art
   }
 );
+
+client.connect()
+    .then(() => {
+      console.log("Connected to the CogWheel_db database.");
+      displayMenu(); // Only call displayMenu after a successful connection
+    })
+    .catch(err => {
+      console.error("Failed to connect to the database:", err);
+});

@@ -1,4 +1,3 @@
-USE CogWheelDB;
 
 -- Inserting initial data into 'department' table
 INSERT INTO department (name)
