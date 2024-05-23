@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const pool = require('./pool');
 
+// Function to display all employees in the database
 const viewAllEmployees = async () => {
     try {
       const result = await pool.query("SELECT * FROM employee");
@@ -10,6 +11,7 @@ const viewAllEmployees = async () => {
     }
   };
 
+  // Function to display all roles in the database
   const viewAllRoles = async () => {
     try {
       const result = await pool.query("SELECT * FROM role");
@@ -19,6 +21,7 @@ const viewAllEmployees = async () => {
     }
   };
 
+  // Function to display all departments in the database
   const viewAllDepartments = async () => {
     try {
       const result = await pool.query("SELECT * FROM department");
@@ -37,7 +40,7 @@ const addDepartment = async () => {
       message: "What is the name of the new department?",
     },
   ]);
-  const query = "INSERT INTO department(name) VALUES($1)";  // Corrected to use the actual column name 'name'
+  const query = "INSERT INTO department(name) VALUES($1)";
   try {
     await pool.query(query, [answer.departmentName]);
     console.log(`Added new department: ${answer.departmentName}`);
@@ -49,10 +52,11 @@ const addDepartment = async () => {
 
 // Function to add a role
 const addRole = async () => {
+  // Retrieve all departments to allow the user to select which department the new role belongs to
   const departments = await pool.query("SELECT * FROM department");
   const departmentChoices = departments.rows.map((dep) => ({
-    name: dep.department_name,  // use 'department_name' as it is in your schema
-    value: dep.id  // use 'id' since that is the column name for department ID
+    name: dep.department_name,
+    value: dep.id
   }));
 
   const answers = await inquirer.prompt([
@@ -89,6 +93,7 @@ const addRole = async () => {
 
 // Function to add an employee
 const addEmployee = async () => {
+  // Retrieve all roles and managers for the user to select from when adding a new employee
   const roles = await pool.query("SELECT * FROM role");
   const roleChoices = roles.rows.map((role) => ({
     name: role.title,
@@ -126,8 +131,6 @@ const addEmployee = async () => {
       choices: managerChoices,
     },
   ]);
-
-  console.log("Inserting employee with the following data:", answers.firstName, answers.lastName, answers.roleId, answers.managerId);
 
   const query =
     "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES($1, $2, $3, $4)";

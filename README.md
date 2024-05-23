@@ -16,7 +16,7 @@ DystopiTrack Systems is a command-line interface (CLI) application designed to m
 ## Installation
 To get started with DystopiTrack Systems, clone the repository and install the necessary dependencies via NPM:
 
-git clone https://github.com/yourusername/DystopiTrack.git
+git clone https://github.com/AaronBringhurst/Dystopi-Track-software
 cd DystopiTrack
 npm install
 
@@ -71,7 +71,7 @@ To exit the application, select the Exit option from the main menu. The applicat
 
 ![Execute Order 66](media/photos/nomorejedi.png)
 
-*Figure 1: Screenshot of the 'Execute Order 66' command being executed in DystopiTrack Systems. The user is prompted to enter a password, 'itsatrap', to initiate a database cleanup. Upon successful entry, the system confirms that "The Jedi have been dealt with," humorously indicating that the database has been reset to its default state.*
+*Figure 66: Screenshot of the 'Execute Order 66' command being executed in DystopiTrack Systems. The user is prompted to enter a password, 'itsatrap', to initiate a database cleanup. Upon successful entry, the system confirms that "The Jedi have been dealt with," humorously indicating that the database has been reset to its default state.*
 
 
 ## Video
@@ -101,7 +101,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) license.
 
 ## Contributing
-for contrubitions please email me (mailto:bringhurst.aaron@gmail.com)
+for contrubitions please email me [bringhurst.aaron@gmail.com](mailto:bringhurst.aaron@gmail.com)
 
 
 ## Questions

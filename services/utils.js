@@ -2,9 +2,11 @@ const fs = require("fs");
 const path = require("path");
 const pool = require("./pool"); // Assuming you export your pool from a central file
 
+
+// Function to execute Order 66: Resets the database by truncating all tables and reseeding them
 const order66 = async () => {
   try {
-    await pool.query("BEGIN");
+    await pool.query("BEGIN"); // Starts the transaction
     await pool.query(
       "TRUNCATE TABLE employee, role, department RESTART IDENTITY CASCADE;"
     );
@@ -12,12 +14,12 @@ const order66 = async () => {
       encoding: "utf-8",
     });
 
-    await pool.query(seedSql);
-    await pool.query("COMMIT");
+    await pool.query(seedSql); // Executes the seed SQL
+    await pool.query("COMMIT"); // Commits the transaction
     console.log("Database has been reset to default state.");
   } catch (err) {
     console.error("Failed to reset the database:", err);
-    await pool.query("ROLLBACK");
+    await pool.query("ROLLBACK"); // Rollback the transatction in case of faliure
   }
 };
 

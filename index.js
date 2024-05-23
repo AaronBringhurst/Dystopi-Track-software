@@ -18,6 +18,7 @@ const pool = require('./services/pool');
 // this unlocks more advanced features of colors module
 colors.enable();
 
+// ASCII Art
 const eyeArt = `
 ⠀⠀⡀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠘⢿⣝⠛⠋⠉⠉⠉⣉⠩⠍⠉⣿⠿⡭⠉⠛⠃⠲⣞⣉⡙⠿⣇⠀⠀⠀
@@ -34,7 +35,7 @@ const eyeArt = `
 ⠿⠏⠭⠟⣤⣴⣬⣨⠙⠲⢦⣧⡤⣔⠲⠝⠚⣷⠀⠀⠀⢀⣴⣷⡠⠃⠀⠀
 ⠀⠀⠀⠀⠀⠉⠉⠉⠛⠻⢛⣿⣶⣶⡽⢤⡄⢛⢃⣒⢠⣿⣿⠟⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠁⠀⠁⠀⠀⠀⠀⠀`;
-
+// Function to display the main menu and handle user actions
 const displayMenu = () => {
   inquirer
     .prompt([
@@ -58,7 +59,7 @@ const displayMenu = () => {
     .then((answers) => {
       switch (answers.action) {
         case "View All Employees":
-          viewAllEmployees().then(() => displayMenu()); // Call displayMenu again after the operation
+          viewAllEmployees().then(() => displayMenu());
           break;
         case "Add Employee":
           addEmployee().then(() => displayMenu());
@@ -86,11 +87,11 @@ const displayMenu = () => {
           process.exit(); // This will exit the application
         default:
           console.log("Option not implemented yet");
-        // Implement other cases as needed
       }
     });
 };
 
+// Function to prompt for password before executing Order 66
 const promptForPassword = () => {
   inquirer
     .prompt([
@@ -111,6 +112,7 @@ const promptForPassword = () => {
     });
 };
 
+// Display startup ASCII art and connect to the database
 figlet.text(
   "Dystopi - Track Systems",
   {
@@ -139,4 +141,6 @@ pool
   .catch((err) => {
     console.error("Failed to connect to the database:", err);
   });
+
+  // Export the pool for potential use elsewhere
   module.exports = pool;
