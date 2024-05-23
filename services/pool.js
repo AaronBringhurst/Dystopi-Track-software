@@ -4,7 +4,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'cogwheel_db',
-  password: 'asdf',  // Use your actual password
+  password: 'asdf',
   port: 5432,
 });
 
