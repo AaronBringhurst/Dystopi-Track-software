@@ -5,7 +5,7 @@ CREATE DATABASE cogwheel_db;
 
 CREATE TABLE department (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(69) UNIQUE NOT NULL
+    department_name VARCHAR(69) UNIQUE NOT NULL
 );
 
 CREATE TABLE role (

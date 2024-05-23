@@ -6,19 +6,14 @@ const {
   addRole,
   viewAllDepartments,
   addDepartment,
-} = require("./db/queries");
+} = require("./services/queries");
 const inquirer = require("inquirer");
 const { Pool } = require("pg");
 const colors = require("colors");
 const figlet = require("figlet");
+const { order66 } = require('./services/utils');
+const pool = require('./services/pool');
 
-const pool = new Pool({
-  user: "postgres",
-  password: "asdf",
-  host: "localhost",
-  database: "cogwheel_db",
-  port: 5432,
-});
 
 // this unlocks more advanced features of colors module
 colors.enable();
@@ -77,9 +72,9 @@ const displayMenu = () => {
         case "Add Role":
           addRole().then(() => displayMenu());
           break;
-        case "viewAllDepartments":
+        case "View All Departments":
           viewAllDepartments().then(() => displayMenu());
-        case "addDepartment":
+        case "Add Department":
           addDepartment().then(() => displayMenu());
           break;
 
@@ -107,9 +102,9 @@ const promptForPassword = () => {
       },
     ])
     .then((answers) => {
-      if (answers.password === "theCorrectPassword") {
-        // Replace 'theCorrectPassword' with the actual password
-        console.log("Order 66 executed successfully.".green);
+      if (answers.password === "itsatrap") {
+        console.log("Order 66 executed successfully. The Jedi have been dealt with.".green);
+        order66().then(() => displayMenu());
       } else {
         console.log("Incorrect password. Access denied.".red);
       }
@@ -144,3 +139,4 @@ pool
   .catch((err) => {
     console.error("Failed to connect to the database:", err);
   });
+  module.exports = pool;

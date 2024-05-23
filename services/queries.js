@@ -1,17 +1,10 @@
 const inquirer = require("inquirer");
-const { Pool } = require("pg");
-const pool = new Pool({
-  user: "postgres",
-  password: "asdf",
-  host: "localhost",
-  database: "cogwheel_db",
-  port: 5432,
-});
+const pool = require('./pool');
 
 const viewAllEmployees = async () => {
     try {
       const result = await pool.query("SELECT * FROM employee");
-      console.log(result.rows);
+      console.table(result.rows);
     } catch (err) {
       console.error("Error fetching employees:", err.stack);
     }
@@ -20,7 +13,7 @@ const viewAllEmployees = async () => {
   const viewAllRoles = async () => {
     try {
       const result = await pool.query("SELECT * FROM role");
-      console.log(result.rows);
+      console.table(result.rows);
     } catch (err) {
       console.error("Error fetching roles:", err.stack);
     }
@@ -29,7 +22,7 @@ const viewAllEmployees = async () => {
   const viewAllDepartments = async () => {
     try {
       const result = await pool.query("SELECT * FROM department");
-      console.log(result.rows);
+      console.table(result.rows);
     } catch (err) {
       console.error("Error fetching departments:", err.stack);
     }
@@ -44,21 +37,22 @@ const addDepartment = async () => {
       message: "What is the name of the new department?",
     },
   ]);
-  const query = "INSERT INTO department(name) VALUES($1)";
+  const query = "INSERT INTO department(name) VALUES($1)";  // Corrected to use the actual column name 'name'
   try {
     await pool.query(query, [answer.departmentName]);
     console.log(`Added new department: ${answer.departmentName}`);
   } catch (err) {
-    console.error(err.stack);
+    console.error("Error adding department:", err.stack);
   }
 };
+
 
 // Function to add a role
 const addRole = async () => {
   const departments = await pool.query("SELECT * FROM department");
   const departmentChoices = departments.rows.map((dep) => ({
-    name: dep.name,
-    value: dep.department_id,
+    name: dep.department_name,  // use 'department_name' as it is in your schema
+    value: dep.id  // use 'id' since that is the column name for department ID
   }));
 
   const answers = await inquirer.prompt([
@@ -76,12 +70,11 @@ const addRole = async () => {
       type: "list",
       name: "departmentId",
       message: "Which department does this role belong to?",
-      choices: departmentChoices,
+      choices: departmentChoices
     },
   ]);
 
-  const query =
-    "INSERT INTO role(title, salary, department_id) VALUES($1, $2, $3)";
+  const query = "INSERT INTO role(title, salary, department_id) VALUES($1, $2, $3)";
   try {
     await pool.query(query, [
       answers.title,
@@ -99,7 +92,7 @@ const addEmployee = async () => {
   const roles = await pool.query("SELECT * FROM role");
   const roleChoices = roles.rows.map((role) => ({
     name: role.title,
-    value: role.role_id,
+    value: role.id,
   }));
 
   const managers = await pool.query("SELECT * FROM employee");
@@ -133,6 +126,8 @@ const addEmployee = async () => {
       choices: managerChoices,
     },
   ]);
+
+  console.log("Inserting employee with the following data:", answers.firstName, answers.lastName, answers.roleId, answers.managerId);
 
   const query =
     "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES($1, $2, $3, $4)";
