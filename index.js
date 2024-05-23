@@ -37,6 +37,9 @@ const eyeArt = `
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠁⠀⠁⠀⠀⠀⠀⠀`;
 // Function to display the main menu and handle user actions
 const displayMenu = () => {
+  console.log("\n\n========================================================\n\n".green);  // Add horizontal line
+  console.log("Welcome to Dystopi-Track Systems. The EYE is always Watching.\n\n".blue);  // Add newlines before and after the message
+  console.log("========================================================\n\n".green);  // Add horizontal line
   inquirer
     .prompt([
       {
@@ -75,6 +78,7 @@ const displayMenu = () => {
           break;
         case "View All Departments":
           viewAllDepartments().then(() => displayMenu());
+          break;
         case "Add Department":
           addDepartment().then(() => displayMenu());
           break;
@@ -87,6 +91,8 @@ const displayMenu = () => {
           process.exit(); // This will exit the application
         default:
           console.log("Option not implemented yet");
+          displayMenu();
+          break;
       }
     });
 };
@@ -108,6 +114,7 @@ const promptForPassword = () => {
         order66().then(() => displayMenu());
       } else {
         console.log("Incorrect password. Access denied.".red);
+        displayMenu();
       }
     });
 };

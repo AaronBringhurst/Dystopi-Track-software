@@ -76,6 +76,11 @@ To exit the application, select the Exit option from the main menu. The applicat
 
 ## Video
 
+[video file](media/videos/homework12walkthrough.mp4)
+
+[![Watch the video](https://img.youtube.com/vi/https://youtu.be/no6CVMSEkvY/maxresdefault.jpg)](https://youtu.be/no6CVMSEkvY)
+
+
 ## Technologies
 
 This project utilizes the following technologies:
