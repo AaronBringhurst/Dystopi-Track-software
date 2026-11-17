@@ -30,4 +30,4 @@ CREATE TABLE employee (
 );
 
 -- Import seed data from seeds.sql for initial data population
-\i seeds.sql
+\ir seeds.sql
