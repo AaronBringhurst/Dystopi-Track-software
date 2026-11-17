@@ -40,7 +40,7 @@ const addDepartment = async () => {
       message: "What is the name of the new department?",
     },
   ]);
-  const query = "INSERT INTO department(name) VALUES($1)";
+  const query = "INSERT INTO department(department_name) VALUES($1)";
   try {
     await pool.query(query, [answer.departmentName]);
     console.log(`Added new department: ${answer.departmentName}`);
@@ -103,7 +103,7 @@ const addEmployee = async () => {
   const managers = await pool.query("SELECT * FROM employee");
   const managerChoices = managers.rows.map((manager) => ({
     name: `${manager.first_name} ${manager.last_name}`,
-    value: manager.employee_id,
+    value: manager.id,
   }));
   managerChoices.unshift({ name: "None", value: null });
 
@@ -147,10 +147,27 @@ const addEmployee = async () => {
   }
 };
 
+// Change an existing employee's role without creating another employee.
+const updateEmployeeRole = async () => {
+  const employees = await pool.query('SELECT id, first_name, last_name FROM employee ORDER BY last_name, first_name');
+  const roles = await pool.query('SELECT id, title FROM role ORDER BY title');
+  if (!employees.rows.length || !roles.rows.length) {
+    console.log('Add employees and roles before updating an employee role.');
+    return;
+  }
+  const { employeeId, roleId } = await inquirer.prompt([
+    { type: 'list', name: 'employeeId', message: 'Which employee?', choices: employees.rows.map(e => ({ name: `${e.first_name} ${e.last_name}`, value: e.id })) },
+    { type: 'list', name: 'roleId', message: 'Select the new role:', choices: roles.rows.map(r => ({ name: r.title, value: r.id })) },
+  ]);
+  await pool.query('UPDATE employee SET role_id = $1 WHERE id = $2', [roleId, employeeId]);
+  console.log('Employee role updated.');
+};
+
 module.exports = {
   addDepartment,
   addRole,
   addEmployee,
+  updateEmployeeRole,
   viewAllDepartments,
   viewAllEmployees,
   viewAllRoles,
