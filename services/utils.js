@@ -14,19 +14,20 @@ const order66 = async () => {
     hideCursor: true
   });
 
+  const client = await pool.connect();
   try {
     console.log('Starting Order 66...'.red);
 
     // Initialize the progress bar with total steps
     progressBar.start(5, 0); // Updated to 5 steps
 
-    await pool.query('BEGIN');
+    await client.query('BEGIN');
     progressBar.increment();
     console.log('Transaction started');
     await delay(1000);  // Delay for 1 second
 
     // Truncate tables and reset identity columns
-    await pool.query('TRUNCATE TABLE employee, role, department RESTART IDENTITY CASCADE;');
+    await client.query('TRUNCATE TABLE employee, role, department RESTART IDENTITY CASCADE;');
     progressBar.increment();
     console.log('Tables truncated');
     await delay(1000);  // Delay for 1 second
@@ -39,12 +40,12 @@ const order66 = async () => {
     await delay(1000);  // Delay for 1 second
 
     // Run seed SQL
-    await pool.query(seedSql);
+    await client.query(seedSql);
     progressBar.increment();
     console.log('Seed data inserted');
     await delay(1000);  // Delay for 1 second
 
-    await pool.query('COMMIT');
+    await client.query('COMMIT');
     progressBar.increment();
     console.log('Transaction committed');
     console.log('Order 66 executed successfully. The Jedi have been dealt with.'.green);
@@ -53,12 +54,11 @@ const order66 = async () => {
     progressBar.stop();
   } catch (err) {
     console.error('Failed to reset the database:', err);
-    await pool.query('ROLLBACK');
+    try { await client.query('ROLLBACK'); } catch (rollbackError) { console.error('Rollback failed:', rollbackError); }
     console.log('Transaction rolled back');
-    
-    // Stop the progress bar in case of error
     progressBar.stop();
-    console.clear();
+  } finally {
+    client.release();
   }
 };
 
