@@ -1,6 +1,6 @@
 
 -- Inserting initial data into 'department' table
-INSERT INTO department (name)
+INSERT INTO department (department_name)
 VALUES ('Surveillance Solutions'), ('Data Extraction'), ('Employee Oversight'), 
        ('Behavior Modification'), ('Intellectual Property Seizure'), ('Counter-Espionage'),
        ('Psychological Operations'), ('Corporate Inquisition'), ('Propaganda Production'), 
