@@ -2,13 +2,13 @@
 const {
   viewAllEmployees,
   addEmployee,
+  updateEmployeeRole,
   viewAllRoles,
   addRole,
   viewAllDepartments,
   addDepartment,
 } = require("./services/queries");
 const inquirer = require("inquirer");
-const { Pool } = require("pg");
 const colors = require("colors");
 const figlet = require("figlet");
 const { order66 } = require('./services/utils');
@@ -68,7 +68,7 @@ const displayMenu = () => {
           addEmployee().then(() => displayMenu());
           break;
         case "Update Employee Role":
-          addEmployee().then(() => displayMenu());
+          updateEmployeeRole().then(() => displayMenu());
           break;
         case "View All Roles":
           viewAllRoles().then(() => displayMenu());
@@ -141,7 +141,8 @@ figlet.text(
 
 pool
   .connect()
-  .then(() => {
+  .then((client) => {
+    client.release();
     console.log("Connected to the CogWheel_db database.");
     displayMenu(); // Only call displayMenu after a successful connection
   })
